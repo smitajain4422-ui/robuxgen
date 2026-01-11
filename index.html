@@ -10,41 +10,41 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Free Robux!</title>
     <style>
-        /* UI Matching for CPAGrip Offers */
-        #cpagrip-offers {
-            display: none;
-            text-align: left;
-            margin-top: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 10px;
+        /* Restoring your original Modal UI with CPAGrip colors */
+        #locker-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000; display: none;
+            justify-content: center; align-items: flex-start; padding: 10px;
+            overflow-y: auto;
+        }
+        .modal-card {
+            background: #fff; border-radius: 8px; width: 100%; max-width: 450px;
+            padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+            position: relative; margin: 50px auto; color: #333;
+            text-align: center;
+        }
+        .locker-header { 
+            background: #fdf7e3; border-radius: 4px; padding: 15px; 
+            margin-bottom: 20px; text-align: left; border: 1px solid #faebcc; 
+            color: #8a6d3b; font-size: 14px; font-weight: 700;
         }
         .offer-item {
-            display: block;
-            background: #fff;
-            color: #333;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            text-decoration: none !important;
-            font-weight: bold;
-            font-size: 14px;
-            border-left: 5px solid #007bff;
-            transition: transform 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #dee1e3; border-radius: 4px; padding: 12px; margin-bottom: 12px;
+            text-align: left; background: #fff; text-decoration: none !important; color: #333;
         }
-        .offer-item:hover {
-            transform: scale(1.02);
-            background: #f8f9fa;
+        .offer-item p { margin: 0; font-size: 14px; font-weight: 700; flex: 1; }
+        .complete-btn { 
+            background: #00b06f; color: #fff !important; padding: 8px 15px;
+            border-radius: 4px; font-weight: 700; font-size: 13px;
+            box-shadow: 0 2px 0 #008f5a;
         }
-        .hot-tag {
-            background: #ff4747;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            float: right;
-            text-transform: uppercase;
+        .close-modal {
+            position: absolute; right: 15px; top: 10px; font-size: 24px;
+            cursor: pointer; color: #999;
         }
+        .progress-bg { background: #e8eaed; height: 10px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { background: #0074ff; height: 100%; width: 15%; transition: width 2s; }
     </style>
 </head>
 
@@ -53,86 +53,50 @@
         <div class="device-frame">
             <div class="device-content">
                 <div class="FLICK">
-
                     <div class="FLICK2">
-
                         <div class="P1">
-
                             <img src="LOGO.png" class="w-75 img-fluid mx-auto">
-
                             <h2>Get <strong>Robux</strong> for free!</h2>
-
                             <hr>
-
                             <h5><strong>Step 1:</strong> Type in your <strong>Roblox</strong> username to continue.</h5>
-
                             <input type="text" class="form-control form-control-lg mb-2 pt-4 pb-4" id="robname" placeholder="Roblox username">
-
                             <h5><strong>Step 2:</strong> Select how many <strong>free Robux</strong> do you want.</h5>
-
                              <select class="form-control form-control-lg mx-auto mb-2" id="robux">
                                  <option value="">How many free Robux?</option>
                                  <option value="1700">1700 Robux</option>
                                  <option value="4500">4500 Robux</option>
                                  <option value="10000">10000 Robux</option>
                               </select>
-
                             <button type="button" class="S1B btn btn-lg btn-block btn-light mb-1 mt-1 pt-2 pb-2" onclick="S1();">Continue</button>
-
                         </div>
 
                         <div class="P2">
-
                             <img src="LOGO.png" class="w-75 img-fluid mx-auto">
-
                             <h5 id="step34"><strong>Step 3:</strong> Is this <strong>your Roblox profile</strong></h5>
-
                             <div class="SCARED">
-
                                 <h3 class="mb-2 robnames"></h3>
-
                                 <div class="row justify-content-center">
-
                                   <div class="col text-center" style="display: flex !important;"><img class="img-fluid robavatar w-75 mx-auto" style="align-self: center !important;"></div>
                                   <div class="col text-center"><img class="img-fluid robwearing"></div>
-
                                 </div>
-
                                 <h4 class="freerobux"><img class="IR" src="Robux.png"> <strong><span id="acc">0</span> free Robux</strong> added...</h4>
-
                             </div>
-
                             <h4 class="freerobux777"><img class="IR" src="Robux.png"> <strong><span id="acc777">0</span> free Robux</strong> added...</h4>
-
                             <div class="row justify-content-center mt-2 YESNO">
-
                                 <div class="col pr-1">
                                     <button type="button" id="BTNYES" class="S2B1 btn btn-block btn-lg btn-light" onclick="SYES();">Yes</button>
                                 </div>
-
                                 <div class="col pl-1">
                                     <button type="button" id="BTNNO" class="S2B2 btn btn-block btn-lg btn-light" onclick="SNO();">No</button>
                                 </div>
-
                             </div>
-
                             <button type="button" id="BTNADD" class="S2B3 btn btn-block btn-lg btn-light mt-2" onclick="SADD();"></button>
-
                             <h5 id="CONS" class="mt-2">Connecting with <strong>Roblox servers</strong>...</h5>
-
-                            <div id="cpagrip-offers">
-                                <h6 class="text-white mb-3">Complete 1 task to verify:</h6>
-                                <div id="offer-list">Loading offers...</div>
-                            </div>
-
-                            <button type="button" id="VER" class="S2B4 VB btn btn-block btn-lg btn-light mt-2" onclick="showOffers();"><strong>Verify Now</strong></button>
-
+                            
+                            <button type="button" id="VER" class="S2B4 VB btn btn-block btn-lg btn-light mt-2" onclick="openLocker();"><strong>Verify</strong></button>
                         </div>
-
                     </div>
-
                     <img class="rob-bot" src="BOTTOM.jpg">
-
                 </div>
             </div>
         </div>
@@ -143,6 +107,19 @@
         <div class="device-power"></div>
     </div>
 
+    <div id="locker-overlay">
+        <div class="modal-card">
+            <div class="close-modal" onclick="closeLocker()">×</div>
+            <h3 style="font-weight: 900; margin-bottom: 15px;">Human Verification</h3>
+            <div class="locker-header">
+                Complete one task below to verify your account and receive your Robux immediately.
+            </div>
+            <div class="progress-bg"><div class="progress-fill"></div></div>
+            <div id="offer_holder">Loading offers...</div>
+            <p style="font-size: 11px; color: #999; margin-top: 15px;">Waiting for completion...</p>
+        </div>
+    </div>
+
     <script src="jquery-3.4.1.min.js"></script>
     <script src="popper.min.js"></script>
     <script src="bootstrap.min.js"></script>
@@ -150,57 +127,51 @@
     <script src="main.js"></script>
 
     <script type="text/javascript">
-        function showOffers() {
-            // Hide the verify button and show the offer container
-            $("#VER").fadeOut();
-            $("#CONS").text("Human Verification Required");
-            $("#cpagrip-offers").fadeIn();
-            loadCPAOffers();
+        function openLocker() {
+            $('#locker-overlay').css('display', 'flex');
+            loadCPAGripOffers();
         }
 
-        function loadCPAOffers() {
+        function closeLocker() {
+            $('#locker-overlay').hide();
+        }
+
+        function loadCPAGripOffers() {
+            $("#offer_holder").html('<div style="padding:20px">Loading Offers...</div>');
             const user_id = "2421989";
             const pubkey = "55055efce909f3b3ae2b679b223a1431";
-            
-            // Fetch IP first for accuracy
+
             $.getJSON("https://api.ipify.org?format=json", function(ipData) {
                 const apiURL = `https://www.cpagrip.com/common/offer_feed_json.php?user_id=${user_id}&pubkey=${pubkey}&ip=${ipData.ip}&ua=${encodeURIComponent(navigator.userAgent)}`;
 
                 $.ajax({
                     url: apiURL,
                     dataType: 'jsonp',
-                    success: function(json) {
-                        if (!json.offers || json.offers.length === 0) {
-                            $("#offer-list").html("<div class='alert alert-danger'>No offers available for your device.</div>");
+                    success: function(json_data) {
+                        if(!json_data.offers || json_data.offers.length === 0) {
+                            $("#offer_holder").html("<p style='color:red;'>No offers found for your device.</p>");
                             return;
                         }
 
-                        // Sort by payout (Highest first)
-                        let sorted = json.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
+                        // Highest Payout First
+                        let sorted = json_data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
                         
-                        let offerHTML = '';
-                        $.each(sorted.slice(0, 4), function(index, offer) {
-                            // Motifiles domain replacement to fix "Mobile Only" errors
+                        var offer_text = '';
+                        $.each(sorted.slice(0, 5), function(key, offer) {
+                            // Motifiles fix for Mobile Only errors
                             let cleanLink = offer.offerlink.replace('www.cpagrip.com', 'motifiles.com');
-                            let hotTag = (index < 2) ? '<span class="hot-tag">Fastest</span>' : '';
                             
-                            offerHTML += `
+                            offer_text += `
                                 <a href="${cleanLink}" target="_blank" class="offer-item">
-                                    ${hotTag}
-                                    ${offer.title}
+                                    <p>${offer.title}</p>
+                                    <div class="complete-btn">Verify</div>
                                 </a>`;
                         });
-                        
-                        $("#offer-list").html(offerHTML);
-                    },
-                    error: function() {
-                        $("#offer-list").html("<div class='alert alert-danger'>Error loading offers. Please refresh.</div>");
+                        $("#offer_holder").html(offer_text);
                     }
                 });
             });
         }
     </script>
 </body>
-
-    </html>
-    
+</html>
