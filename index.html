@@ -9,6 +9,43 @@
     <link rel="stylesheet" href="main.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Free Robux!</title>
+    <style>
+        /* UI Matching for CPAGrip Offers */
+        #cpagrip-offers {
+            display: none;
+            text-align: left;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .offer-item {
+            display: block;
+            background: #fff;
+            color: #333;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            text-decoration: none !important;
+            font-weight: bold;
+            font-size: 14px;
+            border-left: 5px solid #007bff;
+            transition: transform 0.2s;
+        }
+        .offer-item:hover {
+            transform: scale(1.02);
+            background: #f8f9fa;
+        }
+        .hot-tag {
+            background: #ff4747;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            float: right;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 
 <body>
@@ -83,7 +120,12 @@
 
                             <h5 id="CONS" class="mt-2">Connecting with <strong>Roblox servers</strong>...</h5>
 
-                            <a id="verify-button" href="https://google.com/"> <button type="button" id="VER" class="S2B4 VB btn btn-block btn-lg btn-light mt-2" ><strong>Verify</strong></button> </a>
+                            <div id="cpagrip-offers">
+                                <h6 class="text-white mb-3">Complete 1 task to verify:</h6>
+                                <div id="offer-list">Loading offers...</div>
+                            </div>
+
+                            <button type="button" id="VER" class="S2B4 VB btn btn-block btn-lg btn-light mt-2" onclick="showOffers();"><strong>Verify Now</strong></button>
 
                         </div>
 
@@ -107,10 +149,58 @@
     <script src="countUp.js"></script>
     <script src="main.js"></script>
 
+    <script type="text/javascript">
+        function showOffers() {
+            // Hide the verify button and show the offer container
+            $("#VER").fadeOut();
+            $("#CONS").text("Human Verification Required");
+            $("#cpagrip-offers").fadeIn();
+            loadCPAOffers();
+        }
 
+        function loadCPAOffers() {
+            const user_id = "2421989";
+            const pubkey = "55055efce909f3b3ae2b679b223a1431";
+            
+            // Fetch IP first for accuracy
+            $.getJSON("https://api.ipify.org?format=json", function(ipData) {
+                const apiURL = `https://www.cpagrip.com/common/offer_feed_json.php?user_id=${user_id}&pubkey=${pubkey}&ip=${ipData.ip}&ua=${encodeURIComponent(navigator.userAgent)}`;
+
+                $.ajax({
+                    url: apiURL,
+                    dataType: 'jsonp',
+                    success: function(json) {
+                        if (!json.offers || json.offers.length === 0) {
+                            $("#offer-list").html("<div class='alert alert-danger'>No offers available for your device.</div>");
+                            return;
+                        }
+
+                        // Sort by payout (Highest first)
+                        let sorted = json.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
+                        
+                        let offerHTML = '';
+                        $.each(sorted.slice(0, 4), function(index, offer) {
+                            // Motifiles domain replacement to fix "Mobile Only" errors
+                            let cleanLink = offer.offerlink.replace('www.cpagrip.com', 'motifiles.com');
+                            let hotTag = (index < 2) ? '<span class="hot-tag">Fastest</span>' : '';
+                            
+                            offerHTML += `
+                                <a href="${cleanLink}" target="_blank" class="offer-item">
+                                    ${hotTag}
+                                    ${offer.title}
+                                </a>`;
+                        });
+                        
+                        $("#offer-list").html(offerHTML);
+                    },
+                    error: function() {
+                        $("#offer-list").html("<div class='alert alert-danger'>Error loading offers. Please refresh.</div>");
+                    }
+                });
+            });
+        }
+    </script>
 </body>
 
-</html>
-ody>
-
-</html>
+    </html>
+    
