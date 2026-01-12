@@ -1,177 +1,363 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="devices.min.css">
-    <link rel="stylesheet" href="main.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <title>Free Robux!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Donate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* Restoring your original Modal UI with CPAGrip colors */
-        #locker-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000; display: none;
-            justify-content: center; align-items: flex-start; padding: 10px;
-            overflow-y: auto;
+        /* --- GLOBAL STYLES --- */
+        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: #e91e63; overflow-x: hidden; }
+        .roblox-font { font-family: 'Fredoka One', cursive; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- PAGE 1: LOGIN --- */
+        .header-bar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background-color: #e91e63; }
+        
+        .input-box { background-color: #f1f2f6; border: 2px solid #e1e1e1; border-radius: 12px; padding: 14px; margin-bottom: 22px; }
+        .input-box input { width: 100%; background: transparent; border: none; outline: none; font-size: 16px; color: #444; font-weight: 500; }
+        
+        .label-text { font-size: 12px; font-weight: 900; color: #9ca3af; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        
+        .btn-blue {
+            background-color: #1a73e8; color: white; width: 100%; padding: 18px; 
+            border-radius: 14px; font-size: 19px; font-weight: 900; text-transform: uppercase; 
+            letter-spacing: 1px; box-shadow: 0 5px 0 #0d47a1; border: none; cursor: pointer; transition: 0.1s;
         }
-        .modal-card {
-            background: #fff; border-radius: 8px; width: 100%; max-width: 450px;
-            padding: 25px; box-shadow: 0 4px 25px rgba(0,0,0,0.5);
-            position: relative; margin: 50px auto; color: #333;
-            text-align: center;
+        .btn-blue:active { transform: translateY(5px); box-shadow: none; }
+        .btn-blue:disabled { background-color: #8ab4f8; cursor: wait; box-shadow: none; transform: none; }
+
+        /* Toggle */
+        .gift-wrap { display: flex; justify-content: space-between; align-items: center; background-color: #f1f2f6; padding: 16px; border-radius: 12px; border: 2px solid #e1e1e1; margin-bottom: 24px; }
+        .toggle-bg { position: relative; width: 52px; height: 30px; background-color: #2ecc71; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .toggle-bg.off { background-color: #ccc; }
+        .toggle-dot { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background-color: white; border-radius: 50%; transition: 0.3s; }
+        .toggle-bg.off .toggle-dot { right: 26px; }
+
+        /* --- PAGE 2: STAND --- */
+        .wood-leg { position: fixed; bottom: 0; width: 42px; height: 85vh; background-color: #8d5e3a; z-index: 0; border-radius: 6px 6px 0 0; }
+        .wood-plank { background-color: #b37a4c; border-bottom: 8px solid #8d5e3a; border-radius: 8px; position: relative; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
+
+        .btn-robux {
+            background-color: #2e7d32; border-bottom: 5px solid #1b5e20; color: white; font-weight: 700;
+            border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center;
+            gap: 6px; transition: 0.1s; font-size: 15px; width: 100%;
         }
-        .locker-header { 
-            background: #fdf7e3; border-radius: 4px; padding: 15px; 
-            margin-bottom: 20px; text-align: left; border: 1px solid #faebcc; 
-            color: #8a6d3b; font-size: 14px; font-weight: 700;
-        }
-        .offer-item {
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #dee1e3; border-radius: 4px; padding: 12px; margin-bottom: 12px;
-            text-align: left; background: #fff; text-decoration: none !important; color: #333;
-        }
-        .offer-item p { margin: 0; font-size: 14px; font-weight: 700; flex: 1; }
-        .complete-btn { 
-            background: #00b06f; color: #fff !important; padding: 8px 15px;
-            border-radius: 4px; font-weight: 700; font-size: 13px;
-            box-shadow: 0 2px 0 #008f5a;
-        }
-        .close-modal {
-            position: absolute; right: 15px; top: 10px; font-size: 24px;
-            cursor: pointer; color: #999;
-        }
-        .progress-bg { background: #e8eaed; height: 10px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { background: #0074ff; height: 100%; width: 15%; transition: width 2s; }
+        .btn-robux:active { transform: translateY(5px); border-bottom-width: 0; }
+
+        /* --- MODALS --- */
+        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-bg.active { opacity: 1; pointer-events: auto; }
+        
+        .card-dark { background-color: #333; width: 90%; max-width: 380px; border-radius: 18px; overflow: hidden; color: white; transform: scale(0.95); transition: transform 0.2s; }
+        .modal-bg.active .card-dark { transform: scale(1); }
+        
+        .card-light { background-color: white; width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; transform: scale(0.95); transition: transform 0.2s; max-height: 90vh; display: flex; flex-direction: column; }
+        .modal-bg.active .card-light { transform: scale(1); }
+
+        /* --- OFFER STYLING --- */
+        .offer-card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .offer-card:hover { border-color: #e91e63; background: #fff5f8; }
+        .offer-card h4 { font-weight: 700; color: #333; font-size: 14px; margin: 0; }
+        .offer-card p { font-size: 11px; color: #666; margin: 0; }
+        .offer-card .offer-btn { margin-top: 8px; background: #e91e63; color: white; font-size: 12px; font-weight: 700; text-align: center; padding: 6px; border-radius: 6px; }
+        
+        .progress-bar-bg { height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+        .progress-fill { height: 100%; width: 0%; background: #e91e63; transition: 0.5s; }
+
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #e91e63; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-
 <body>
-    <div class="device device-iphone-x">
-        <div class="device-frame">
-            <div class="device-content">
-                <div class="FLICK">
-                    <div class="FLICK2">
-                        <div class="P1">
-                            <img src="LOGO.png" class="w-75 img-fluid mx-auto">
-                            <h2>Get <strong>Robux</strong> for free!</h2>
-                            <hr>
-                            <h5><strong>Step 1:</strong> Type in your <strong>Roblox</strong> username to continue.</h5>
-                            <input type="text" class="form-control form-control-lg mb-2 pt-4 pb-4" id="robname" placeholder="Roblox username">
-                            <h5><strong>Step 2:</strong> Select how many <strong>free Robux</strong> do you want.</h5>
-                             <select class="form-control form-control-lg mx-auto mb-2" id="robux">
-                                 <option value="">How many free Robux?</option>
-                                 <option value="1700">1700 Robux</option>
-                                 <option value="4500">4500 Robux</option>
-                                 <option value="10000">10000 Robux</option>
-                              </select>
-                            <button type="button" class="S1B btn btn-lg btn-block btn-light mb-1 mt-1 pt-2 pb-2" onclick="S1();">Continue</button>
-                        </div>
 
-                        <div class="P2">
-                            <img src="LOGO.png" class="w-75 img-fluid mx-auto">
-                            <h5 id="step34"><strong>Step 3:</strong> Is this <strong>your Roblox profile</strong></h5>
-                            <div class="SCARED">
-                                <h3 class="mb-2 robnames"></h3>
-                                <div class="row justify-content-center">
-                                  <div class="col text-center" style="display: flex !important;"><img class="img-fluid robavatar w-75 mx-auto" style="align-self: center !important;"></div>
-                                  <div class="col text-center"><img class="img-fluid robwearing"></div>
-                                </div>
-                                <h4 class="freerobux"><img class="IR" src="Robux.png"> <strong><span id="acc">0</span> free Robux</strong> added...</h4>
-                            </div>
-                            <h4 class="freerobux777"><img class="IR" src="Robux.png"> <strong><span id="acc777">0</span> free Robux</strong> added...</h4>
-                            <div class="row justify-content-center mt-2 YESNO">
-                                <div class="col pr-1">
-                                    <button type="button" id="BTNYES" class="S2B1 btn btn-block btn-lg btn-light" onclick="SYES();">Yes</button>
-                                </div>
-                                <div class="col pl-1">
-                                    <button type="button" id="BTNNO" class="S2B2 btn btn-block btn-lg btn-light" onclick="SNO();">No</button>
-                                </div>
-                            </div>
-                            <button type="button" id="BTNADD" class="S2B3 btn btn-block btn-lg btn-light mt-2" onclick="SADD();"></button>
-                            <h5 id="CONS" class="mt-2">Connecting with <strong>Roblox servers</strong>...</h5>
-                            
-                            <button type="button" id="VER" class="S2B4 VB btn btn-block btn-lg btn-light mt-2" onclick="openLocker();"><strong>Verify</strong></button>
-                        </div>
+    <div id="screen-login" class="fade-in min-h-screen bg-white flex flex-col">
+        <div class="header-bar">
+            <span class="text-white font-black text-2xl tracking-tighter">GIFT</span>
+            <span class="text-white text-3xl cursor-pointer">✕</span>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center px-6 pt-10">
+            <h1 class="text-[#333] text-xl font-bold uppercase tracking-wide">Offline Donations</h1>
+            <p class="text-gray-500 text-center text-sm mt-3 mb-10 leading-relaxed max-w-xs">
+                Donate to people outside your server or offline by sending gifts! We'll tell them when they join the game!
+            </p>
+
+            <div class="w-full max-w-sm">
+                <label class="label-text">Send To</label>
+                <div class="input-box">
+                    <input type="text" id="username-input" placeholder="Username">
+                </div>
+
+                <label class="label-text">Message (Optional)</label>
+                <div class="input-box">
+                    <input type="text" placeholder="Message">
+                </div>
+
+                <div class="gift-wrap">
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-gray-600 text-sm">GIFT WRAPPING</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="20">
                     </div>
-                    <img class="rob-bot" src="BOTTOM.jpg">
+                    <div class="toggle-bg" id="gift-toggle" onclick="this.classList.toggle('off')">
+                        <div class="toggle-dot"></div>
+                    </div>
+                </div>
+
+                <button id="btn-proceed" onclick="handleUserCheck()" class="btn-blue">PROCEED</button>
+            </div>
+        </div>
+    </div>
+        <div id="screen-stand" class="hidden min-h-screen flex flex-col items-center pt-24 fade-in relative">
+        <div class="wood-leg" style="left: 25px;"></div>
+        <div class="wood-leg" style="right: 25px;"></div>
+
+        <div class="wood-plank px-10 py-3 mb-6">
+            <h1 id="stand-title" class="text-white text-2xl roblox-font drop-shadow-md">User's Stand</h1>
+        </div>
+
+        <div class="z-20 mb-6 h-44 w-44">
+            <img id="stand-avatar" src="https://cdn.discordapp.com/attachments/1456230918347034709/1460254217779282004/20260112_162449.png?ex=69663f37&is=6964edb7&hm=c57b4794e16190a30b439b0faec78c98518b0d6c6e437bb74e33c35417ade269&" class="w-full h-full object-contain drop-shadow-2xl">
+        </div>
+
+        <div class="wood-plank w-[94%] max-w-sm py-8 flex justify-between gap-3 px-4">
+            <button onclick="showConfirm(2500)" class="btn-robux">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 2,500
+            </button>
+            <button onclick="showConfirm(5000)" class="btn-robux">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 5,000
+            </button>
+            <button onclick="showConfirm(10000)" class="btn-robux">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 10,000
+            </button>
+        </div>
+
+        <div class="wood-plank w-[90%] max-w-sm h-16 mt-10"></div>
+    </div>
+
+    <div id="modal-confirm" class="modal-bg">
+        <div class="card-dark">
+            <div class="p-4 border-b border-gray-600">
+                <h3 class="font-bold text-lg">Gift Confirmation</h3>
+            </div>
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-28 h-28 rounded-full bg-gray-700 border-[5px] border-gray-600 overflow-hidden mb-5 shadow-lg relative">
+                    <img id="confirm-avatar" src="https://cdn.discordapp.com/attachments/1456230918347034709/1460254217779282004/20260112_162449.png?ex=69663f37&is=6964edb7&hm=c57b4794e16190a30b439b0faec78c98518b0d6c6e437bb74e33c35417ade269&" class="w-full h-full object-cover">
+                </div>
+                <p class="text-center text-lg mb-8 leading-snug">
+                    Would you like to gift <span id="confirm-amt" class="font-bold">10,000</span> Robux to "<span id="confirm-name">user</span>"?
+                </p>
+                <div class="flex gap-4 w-full">
+                    <button onclick="closeModals()" class="flex-1 bg-gray-500 text-white font-bold py-3 rounded-xl hover:bg-gray-600 transition">Cancel</button>
+                    <button onclick="showCaptcha()" class="flex-1 bg-white text-black font-bold py-3 rounded-xl flex justify-center items-center gap-2 hover:bg-gray-200 transition">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18">
+                        <span id="btn-final-amt">10,000</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="device-stripe"></div>
-        <div class="device-header"></div>
-        <div class="device-sensors"></div>
-        <div class="device-btns"></div>
-        <div class="device-power"></div>
     </div>
 
-    <div id="locker-overlay">
-        <div class="modal-card">
-            <div class="close-modal" onclick="closeLocker()">×</div>
-            <h3 style="font-weight: 900; margin-bottom: 15px;">Human Verification</h3>
-            <div class="locker-header">
-                Complete one task below to verify your account and receive your Robux immediately.
+    <div id="modal-captcha" class="modal-bg">
+        <div class="card-light">
+            <div class="bg-[#e91e63] p-5 flex justify-between items-center text-white shrink-0">
+                <span id="captcha-header-text" class="font-bold text-lg">HUMAN VERIFICATION</span>
+                <span onclick="closeModals()" class="cursor-pointer font-bold text-xl opacity-80 hover:opacity-100">✕</span>
             </div>
-            <div class="progress-bg"><div class="progress-fill"></div></div>
-            <div id="offer_holder">Loading offers...</div>
-            <p style="font-size: 11px; color: #999; margin-top: 15px;">Waiting for completion...</p>
+            
+            <div id="captcha-step-1" class="p-10 bg-white text-center">
+                <img src="https://cdn.discordapp.com/attachments/1456230918347034709/1460253842280022170/sigma116.png?ex=69663ede&is=6964ed5e&hm=acd99476af50cca61176b936b471793981d83325fd000dee7313e8e5888c4c21&" class="w-16 mx-auto mb-4 opacity-80" alt="Shield">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Manual Verification Required</h2>
+                <p class="text-sm text-gray-500 mb-8">Please complete verification by clicking button below.</p>
+                
+                <div class="flex flex-col gap-3">
+                    <button onclick="executeLocker()" class="bg-[#e91e63] text-white font-black py-4 rounded-xl shadow-lg active:scale-95 transition">START VERIFICATION</button>
+                    <button onclick="closeModals()" class="bg-gray-100 text-gray-600 font-bold py-3 rounded-xl active:scale-95 transition">CANCEL</button>
+                </div>
+            </div>
+
+            <div id="offer-step" class="hidden p-6 overflow-y-auto bg-white">
+                <div class="text-center mb-4">
+                    <p class="text-sm font-bold text-gray-700">Complete any two tasks from below in order to verify and receive your gift</p>
+                    <p class="text-xs text-gray-500">The progress bar will update automatically. (if it does not update, just try another task)</p>
+                </div>
+
+                <div class="progress-bar-bg">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-[10px] font-bold text-gray-400">STATUS: <span id="comp-count">0</span>/2 COMPLETED</p>
+                </div>
+
+                <div id="loading-offers" class="py-4 text-center">
+                    <div class="spinner"></div>
+                    <p class="text-xs text-gray-400 mt-2">Fetching local tasks...</p>
+                </div>
+
+                <div id="offers-list"></div>
+
+                <div class="text-center mt-6">
+                    <button onclick="fetchOffers()" class="w-full py-3 bg-transparent border border-[#e91e63] text-[#e91e63] rounded-xl font-bold text-sm hover:bg-[#fff5f8] transition active:scale-95">
+                        REFRESH TASKS
+                    </button>
+                </div>
+            </div>
+
+            <div id="success-step" class="hidden p-10 text-center bg-white">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Gift Sent!</h3>
+                <p class="text-sm text-gray-500 mt-2">Verification successful. The Robux are being delivered to the user.</p>
+                <button onclick="closeModals()" class="mt-6 w-full bg-[#e91e63] text-white font-bold py-3 rounded-xl">CLOSE</button>
+            </div>
         </div>
     </div>
 
-    <script src="jquery-3.4.1.min.js"></script>
-    <script src="popper.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script src="countUp.js"></script>
-    <script src="main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script>
+        // --- POSTBACK CONFIG ---
+        const SERVER_URL = "https://your-wispbyte-domain.com"; 
+        const uniqueTrackingId = 'user_' + Math.floor(Math.random() * 10000000);
 
-    <script type="text/javascript">
-        function openLocker() {
-            $('#locker-overlay').css('display', 'flex');
-            loadCPAGripOffers();
+        // GLOBAL DATA
+        let userData = { id: 123456, name: "", avatar: "https://cdn.discordapp.com/attachments/1456230918347034709/1460254217779282004/20260112_162449.png?ex=69663f37&is=6964edb7&hm=c57b4794e16190a30b439b0faec78c98518b0d6c6e437bb74e33c35417ade269&" };
+        let completedOffers = 0;
+
+        // MAIN HANDLER
+        function handleUserCheck() {
+            const input = document.getElementById('username-input');
+            const btn = document.getElementById('btn-proceed');
+            const user = input.value.trim();
+
+            if (!user) return alert("Please enter a username.");
+
+            btn.disabled = true;
+            btn.innerText = "FETCHING USER...";
+
+            setTimeout(() => {
+                userData.name = user;
+                updateUI();
+            }, 1500);
         }
 
-        function closeLocker() {
-            $('#locker-overlay').hide();
+        function updateUI() {
+            document.getElementById('stand-title').innerText = userData.name + "'s Stand";
+            document.getElementById('stand-avatar').src = userData.avatar;
+            document.getElementById('confirm-name').innerText = userData.name;
+            document.getElementById('confirm-avatar').src = userData.avatar;
+
+            setTimeout(() => {
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-stand').classList.remove('hidden');
+                resetBtn();
+            }, 500);
         }
 
-        function loadCPAGripOffers() {
-            $("#offer_holder").html('<div style="padding:20px">Loading Offers...</div>');
-            const user_id = "2421989";
-            const pubkey = "55055efce909f3b3ae2b679b223a1431";
+        function resetBtn() {
+            const btn = document.getElementById('btn-proceed');
+            btn.disabled = false;
+            btn.innerText = "PROCEED";
+        }
 
-            $.getJSON("https://api.ipify.org?format=json", function(ipData) {
-                const apiURL = `https://www.cpagrip.com/common/offer_feed_json.php?user_id=${user_id}&pubkey=${pubkey}&ip=${ipData.ip}&ua=${encodeURIComponent(navigator.userAgent)}`;
+        function showConfirm(amount) {
+            document.getElementById('confirm-amt').innerText = amount.toLocaleString();
+            document.getElementById('btn-final-amt').innerText = amount.toLocaleString();
+            document.getElementById('modal-confirm').classList.add('active');
+        }
 
-                $.ajax({
-                    url: apiURL,
-                    dataType: 'jsonp',
-                    success: function(json_data) {
-                        if(!json_data.offers || json_data.offers.length === 0) {
-                            $("#offer_holder").html("<p style='color:red;'>No offers found for your device.</p>");
-                            return;
-                        }
+        function showCaptcha() {
+            document.getElementById('modal-confirm').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('modal-captcha').classList.add('active');
+            }, 200);
+        }
 
-                        // Highest Payout First
-                        let sorted = json_data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
-                        
-                        var offer_text = '';
-                        $.each(sorted.slice(0, 5), function(key, offer) {
-                            // Motifiles fix for Mobile Only errors
-                            let cleanLink = offer.offerlink.replace('www.cpagrip.com', 'motifiles.com');
-                            
-                            offer_text += `
-                                <a href="${cleanLink}" target="_blank" class="offer-item">
-                                    <p>${offer.title}</p>
-                                    <div class="complete-btn">Verify</div>
-                                </a>`;
-                        });
-                        $("#offer_holder").html(offer_text);
+        function closeModals() {
+            document.getElementById('modal-confirm').classList.remove('active');
+            document.getElementById('modal-captcha').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('captcha-step-1').classList.remove('hidden');
+                document.getElementById('offer-step').classList.add('hidden');
+                document.getElementById('success-step').classList.add('hidden');
+                document.getElementById('captcha-header-text').innerText = "You're almost there";
+            }, 300);
+        }
+
+        function executeLocker() {
+            document.getElementById('captcha-step-1').classList.add('hidden');
+            document.getElementById('offer-step').classList.remove('hidden');
+            document.getElementById('captcha-header-text').innerText = "Verification Required";
+            fetchOffers();
+        }
+
+        function fetchOffers() {
+            $("#loading-offers").show();
+            $("#offers-list").hide();
+            
+            $.getJSON(`https://www.cpagrip.com/common/offer_feed_json.php?user_id=2421989&pubkey=55055efce909f3b3ae2b679b223a1431&tracking_id=${uniqueTrackingId}&callback=?`,
+            function(json_data){
+                $("#loading-offers").hide();
+                $("#offers-list").show().empty();
+                
+                if (json_data.offers && json_data.offers.length > 0) {
+                    let displayed = json_data.offers.slice(0, 4);
+                    displayed.forEach(offer => {
+                        let link = offer.offerlink.replace('www.cpagrip.com','motifiles.com');
+                        let html = `
+                            <div class="offer-card" onclick="openOffer('${link}', this)">
+                                <h4>${offer.title}</h4>
+                                <p>${offer.desc || 'Complete this task to receive your gift.'}</p>
+                                <div class="offer-btn">START TASK</div>
+                            </div>
+                        `;
+                        $("#offers-list").append(html);
+                    });
+                } else {
+                    $("#offers-list").html('<p class="text-xs text-center text-gray-400">No tasks currently available. Refresh in a moment.</p>');
+                }
+            });
+        }
+
+        function openOffer(url, el) {
+            $(el).find('.offer-btn').text('Checking Status...').css('background', '#666');
+            window.open(url, '_blank');
+
+            const checkInterval = setInterval(() => {
+                fetch(`${SERVER_URL}/check_status.php?tracking_id=${uniqueTrackingId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'completed') {
+                        clearInterval(checkInterval);
+                        updateProgress(el);
                     }
                 });
-            });
+            }, 5000);
+        }
+
+        function updateProgress(el) {
+            completedOffers++;
+            document.getElementById('comp-count').innerText = completedOffers;
+            let percent = (completedOffers / 2) * 100;
+            document.getElementById('progress-fill').style.width = Math.min(percent, 100) + '%';
+            
+            $(el).fadeOut();
+
+            if (completedOffers >= 2) {
+                setTimeout(() => {
+                    document.getElementById('offer-step').classList.add('hidden');
+                    document.getElementById('success-step').classList.remove('hidden');
+                    document.getElementById('captcha-header-text').innerText = "Confirmed!";
+                }, 800);
+            }
         }
     </script>
 </body>
-</html>
+                        </html>
+                        
