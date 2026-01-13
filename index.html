@@ -60,12 +60,21 @@
         .modal-bg.active .card-light { transform: scale(1); }
 
         /* --- OFFER STYLING --- */
-        .offer-card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .offer-card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; position: relative; }
         .offer-card:hover { border-color: #e91e63; background: #fff5f8; }
         .offer-card h4 { font-weight: 700; color: #333; font-size: 14px; margin: 0; }
         .offer-card p { font-size: 11px; color: #666; margin: 0; }
         .offer-card .offer-btn { margin-top: 8px; background: #e91e63; color: white; font-size: 12px; font-weight: 700; text-align: center; padding: 6px; border-radius: 6px; }
         
+        /* NEW HOT STICKER STYLE */
+        .hot-sticker {
+            position: absolute; top: -8px; left: 10px;
+            background: #ff4d4d; color: white; padding: 2px 10px;
+            border-radius: 4px; font-size: 10px; font-weight: 900;
+            text-transform: uppercase; z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
         .progress-bar-bg { height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
         .progress-fill { height: 100%; width: 0%; background: #e91e63; transition: 0.5s; }
 
@@ -112,7 +121,7 @@
             </div>
         </div>
     </div>
-        <div id="screen-stand" class="hidden min-h-screen flex flex-col items-center pt-24 fade-in relative">
+    <div id="screen-stand" class="hidden min-h-screen flex flex-col items-center pt-24 fade-in relative">
         <div class="wood-leg" style="left: 25px;"></div>
         <div class="wood-leg" style="right: 25px;"></div>
 
@@ -218,9 +227,8 @@
                 <button onclick="closeModals()" class="mt-6 w-full bg-[#e91e63] text-white font-bold py-3 rounded-xl">CLOSE</button>
             </div>
         </div>
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        </div>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script>
         // --- POSTBACK CONFIG ---
         const SERVER_URL = "https://your-wispbyte-domain.com"; 
@@ -297,31 +305,56 @@
             fetchOffers();
         }
 
+        // --- UPDATED OGADS OFFER LOAD FUNCTION ---
         function fetchOffers() {
+            const apiKey = "38083|fqRt4E7BOs6reipIQVm21WNEvXnbNMNihYOgewUq8f871a6f";
+            const endpoint = "https://applocked.store/api/v2";
+            
             $("#loading-offers").show();
             $("#offers-list").hide();
             
-            $.getJSON(`https://www.cpagrip.com/common/offer_feed_json.php?user_id=2421989&pubkey=55055efce909f3b3ae2b679b223a1431&tracking_id=${uniqueTrackingId}&callback=?`,
-            function(json_data){
-                $("#loading-offers").hide();
-                $("#offers-list").show().empty();
+            $.getJSON("https://api.ipify.org?format=json", function(ipData) {
+                const apiURL = `${endpoint}?ip=${ipData.ip}&user_agent=${encodeURIComponent(navigator.userAgent)}&max=30&ctype=3`;
                 
-                if (json_data.offers && json_data.offers.length > 0) {
-                    let displayed = json_data.offers.slice(0, 4);
-                    displayed.forEach(offer => {
-                        let link = offer.offerlink.replace('www.cpagrip.com','motifiles.com');
-                        let html = `
-                            <div class="offer-card" onclick="openOffer('${link}', this)">
-                                <h4>${offer.title}</h4>
-                                <p>${offer.desc || 'Complete this task to receive your gift.'}</p>
-                                <div class="offer-btn">START TASK</div>
-                            </div>
-                        `;
-                        $("#offers-list").append(html);
-                    });
-                } else {
-                    $("#offers-list").html('<p class="text-xs text-center text-gray-400">No tasks currently available. Refresh in a moment.</p>');
-                }
+                $.ajax({
+                    url: apiURL,
+                    headers: { "Authorization": `Bearer ${apiKey}` },
+                    method: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#loading-offers").hide();
+                        $("#offers-list").show().empty();
+
+                        if (data.offers && data.offers.length > 0) {
+                            // Sort by highest payout
+                            let sorted = data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
+                            
+                            $.each(sorted.slice(0, 5), function(i, o) {
+                                // Logic for Hot Sticker on Top 2
+                                let sticker = (i < 2) ? '<div class="hot-sticker">Hot</div>' : '';
+                                
+                                // Append unique tracking ID to the link for postback
+                                let link = o.link + (o.link.includes('?') ? '&' : '?') + `aff_sub5=${uniqueTrackingId}`;
+                                
+                                let html = `
+                                    <div class="offer-card" onclick="openOffer('${link}', this)">
+                                        ${sticker}
+                                        <h4>${o.name}</h4>
+                                        <p>Complete this task to verify your gift delivery.</p>
+                                        <div class="offer-btn">START TASK</div>
+                                    </div>
+                                `;
+                                $("#offers-list").append(html);
+                            });
+                        } else {
+                            $("#offers-list").html('<p class="text-xs text-center text-gray-400">No tasks currently available. Refresh in a moment.</p>');
+                        }
+                    },
+                    error: function() {
+                        $("#loading-offers").hide();
+                        $("#offers-list").show().html('<p class="text-xs text-center text-red-400">Connection error. Check your internet.</p>');
+                    }
+                });
             });
         }
 
@@ -359,5 +392,4 @@
         }
     </script>
 </body>
-                        </html>
-                        
+</html>
