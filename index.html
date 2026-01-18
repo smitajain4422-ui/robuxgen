@@ -280,9 +280,8 @@
             </div>
 
             <div class="wood-plank w-[85%] max-w-sm h-12 mt-4 mb-10 opacity-90"></div>
-        </div>
-
-        <div id="modal-confirm" class="modal-bg">
+    </div>
+            <div id="modal-confirm" class="modal-bg">
             <div class="card-dark">
                 <div class="p-5 border-b border-gray-700 bg-[#252f3f]">
                     <h3 class="font-bold text-xl roblox-font text-white tracking-wide">CONFIRM GIFT</h3>
@@ -361,8 +360,8 @@
 
     </div> <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script>
-        // --- POSTBACK CONFIG ---
-        const SERVER_URL = "https://your-wispbyte-domain.com"; 
+        // --- CONFIGURATION UPDATED FOR VERCEL API ---
+        const SERVER_URL = "/api"; 
         const uniqueTrackingId = 'user_' + Math.floor(Math.random() * 10000000);
 
         // GLOBAL DATA
@@ -527,7 +526,8 @@
             window.open(url, '_blank');
 
             const checkInterval = setInterval(() => {
-                fetch(`${SERVER_URL}/check_status.php?tracking_id=${uniqueTrackingId}`)
+                // UPDATED: Now points to Vercel API Proxy (/api/check)
+                fetch(`${SERVER_URL}/check?tracking_id=${uniqueTrackingId}`)
                 .then(r => r.json())
                 .then(data => {
                     if (data.status === 'completed') {
@@ -558,4 +558,5 @@
         }
     </script>
 </body>
-</html>
+               </html>
+               
