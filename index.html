@@ -13,7 +13,7 @@
             margin: 0; 
             padding: 0; 
             font-family: 'Nunito', sans-serif; 
-            background-color: #1a1a1a; /* Dark background for PC view */
+            background-color: #1a1a1a; 
             overflow: hidden; 
             height: 100vh;
             display: flex;
@@ -21,12 +21,12 @@
             justify-content: center;
         }
 
-        /* --- DEVICE FRAME / OUTLINE (Request #1) --- */
+        /* --- DEVICE FRAME --- */
         .app-container {
             width: 100%;
-            max-width: 450px; /* Mobile width constraint for PC */
+            max-width: 450px; 
             height: 100%;
-            max-height: 850px; /* Height constraint */
+            max-height: 850px; 
             background-color: #fff;
             position: relative;
             overflow: hidden;
@@ -38,16 +38,15 @@
         @media (min-width: 768px) {
             .app-container {
                 border-radius: 20px;
-                border: 8px solid #2d2d2d; /* The Outline */
+                border: 8px solid #2d2d2d; 
                 height: 90vh;
             }
         }
 
-        /* --- VISUALS & ANIMATIONS (Request #3) --- */
+        /* --- VISUALS --- */
         .roblox-font { font-family: 'Fredoka One', cursive; letter-spacing: 0.5px; }
         .hidden { display: none !important; }
         
-        /* Smooth Page Transitions */
         .screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -65,17 +64,16 @@
             z-index: 10;
         }
 
-        /* 3D Button Effects (Pls Donate Style) */
         .btn-3d {
             transition: transform 0.1s, border-bottom-width 0.1s;
         }
         .btn-3d:active {
             transform: translateY(4px);
             border-bottom-width: 0px !important;
-            margin-bottom: 4px; /* To prevent layout jump */
+            margin-bottom: 4px;
         }
 
-        /* --- PAGE 1: LOGIN STYLES --- */
+        /* --- LOGIN STYLES --- */
         .header-bg { 
             background: linear-gradient(135deg, #e91e63, #c2185b);
             border-bottom: 4px solid #880e4f;
@@ -108,21 +106,21 @@
             font-family: 'Fredoka One', cursive;
             text-transform: uppercase; 
             letter-spacing: 1px; 
-            border-bottom: 6px solid #1d4ed8; /* 3D effect */
+            border-bottom: 6px solid #1d4ed8; 
             cursor: pointer; 
         }
 
-        /* Gift Toggle */
+        /* Toggle */
         .gift-wrap { display: flex; justify-content: space-between; align-items: center; background-color: #ecfdf5; padding: 12px 16px; border-radius: 16px; border: 2px solid #a7f3d0; margin-bottom: 24px; }
         .toggle-bg { position: relative; width: 56px; height: 32px; background-color: #10b981; border-radius: 30px; cursor: pointer; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
         .toggle-bg.off { background-color: #d1d5db; }
         .toggle-dot { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; background-color: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .toggle-bg.off .toggle-dot { right: 28px; }
 
-        /* --- PAGE 2: STAND STYLES --- */
+        /* --- STAND STYLES --- */
         .wood-leg { position: fixed; bottom: 0; width: 30px; height: 100%; background: repeating-linear-gradient(90deg, #8d5e3a, #7a4e2e 10px); z-index: 0; border-radius: 8px; border: 2px solid #5d3a22; }
         .wood-plank { 
-            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); /* Subtle texture */
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); 
             background-color: #b37a4c; 
             border: 3px solid #6d4c41;
             border-bottom: 8px solid #5d4037; 
@@ -158,15 +156,12 @@
         .card-light { background-color: white; width: 90%; max-width: 380px; border-radius: 24px; overflow: hidden; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 85%; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .modal-bg.active .card-light { transform: scale(1); }
 
-        /* --- OFFER STYLING (Request #4 - Fixed Height) --- */
-        /* Wrapper for the scrollable area */
+        /* --- OFFERS --- */
         .offers-scroll-container {
-            max-height: 320px; /* FIXED HEIGHT */
-            overflow-y: auto;  /* ENABLE SCROLL INSIDE */
-            padding-right: 5px; /* prevent scrollbar overlap */
+            max-height: 320px; 
+            overflow-y: auto;  
+            padding-right: 5px; 
         }
-        
-        /* Scrollbar Styling */
         .offers-scroll-container::-webkit-scrollbar { width: 6px; }
         .offers-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .offers-scroll-container::-webkit-scrollbar-thumb { background: #e91e63; border-radius: 4px; }
@@ -174,22 +169,26 @@
         .offer-card { 
             background: #fff; 
             border: 2px solid #f3f4f6; 
-            border-bottom: 4px solid #e5e7eb;
+            border-bottom: 4px solid #e5e7eb; 
             border-radius: 12px; 
             padding: 14px; 
             margin-bottom: 12px; 
             cursor: pointer; 
             transition: 0.2s; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 4px; 
-            position: relative; 
+            display: flex; flex-direction: column; gap: 4px; position: relative; 
         }
         .offer-card:hover { border-color: #e91e63; transform: translateY(-2px); }
         .offer-card:active { transform: translateY(1px); border-bottom-width: 2px; }
         
+        /* New Offer Animation */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .offer-card.new-item { animation: slideInUp 0.5s ease-out forwards; }
+        
         .hot-sticker {
-            position: absolute; top: -10px; right: 10px; left: auto; /* Moved to right for better look */
+            position: absolute; top: -10px; right: 10px; left: auto;
             background: linear-gradient(45deg, #ff4d4d, #f44336); color: white; padding: 4px 8px;
             border-radius: 20px; font-size: 10px; font-weight: 900;
             text-transform: uppercase; z-index: 5;
@@ -203,8 +202,7 @@
 </head>
 <body>
 
-    <audio id="sfx-click" src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAACAAEA/v///wAAAAD//wAA/v/+/wAAAQACAAIA///+/wEAAQAAAAEAAAD//wAAAgABAAAA//8BAAAAAQABAAAAAQAAAP//AQABAAAA//8BAAIA//8AAAAAAQABAAAA//8BAAEA//8AAAAAAQABAAAA//8AAAAAAQABAAAA//8AAAAAAQABAAAA//8BAAAAAQABAAAA//8BAAAAAQAAAAAAAQABAAAA//8BAAAAAQAAAAAAAQABAAAA//8BAAAAAQAAAAAAAQAAAAAAAQAAAAAAAQAAAAAAAQAAAA=="></audio>
-    
+    <audio id="sfx-click" src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAA=="></audio>
     <audio id="sfx-btn" src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAA=="></audio>
 
     <div class="app-container">
@@ -280,8 +278,9 @@
             </div>
 
             <div class="wood-plank w-[85%] max-w-sm h-12 mt-4 mb-10 opacity-90"></div>
-    </div>
-            <div id="modal-confirm" class="modal-bg">
+        </div>
+
+        <div id="modal-confirm" class="modal-bg">
             <div class="card-dark">
                 <div class="p-5 border-b border-gray-700 bg-[#252f3f]">
                     <h3 class="font-bold text-xl roblox-font text-white tracking-wide">CONFIRM GIFT</h3>
@@ -305,7 +304,8 @@
         </div>
 
         <div id="modal-captcha" class="modal-bg">
-            <div class="card-light flex flex-col h-full max-h-[500px]"> <div class="bg-[#e91e63] p-4 flex justify-between items-center text-white shrink-0 shadow-md z-10">
+            <div class="card-light flex flex-col h-full max-h-[500px]"> 
+                <div class="bg-[#e91e63] p-4 flex justify-between items-center text-white shrink-0 shadow-md z-10">
                     <span id="captcha-header-text" class="font-black text-lg roblox-font tracking-wide">HUMAN VERIFICATION</span>
                     <span onclick="closeModals(); playSfx('click')" class="cursor-pointer font-bold text-xl opacity-80 hover:opacity-100">✕</span>
                 </div>
@@ -322,16 +322,15 @@
 
                 <div id="offer-step" class="hidden flex-1 flex flex-col overflow-hidden bg-gray-50">
                     <div class="p-4 bg-white border-b border-gray-200 shrink-0 z-10 shadow-sm">
-                        <p class="text-xs font-bold text-gray-700 text-center mb-2">Complete any two tasks from below in order to verify and receive your gift</p>
-                        <p class="text-xs text-gray-500">The progress bar will update automatically. (if it does not update, just try another task)</p>
+                        <p class="text-xs font-bold text-gray-700 text-center mb-2">Complete any tasks from below to verify yourself and receive your gift</p>
+                        <p class="text-xs text-gray-500">The progress bar will update automatically on task completion.</p>
                         <div class="w-full bg-gray-200 rounded-full h-3">
                             <div id="progress-fill" class="bg-[#e91e63] h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
-                        <p class="text-[10px] text-center text-gray-400 mt-1 font-bold tracking-wider">STATUS: <span id="comp-count">0</span>/2 Completed</p>
+                        <p class="text-[10px] text-center text-gray-400 mt-1 font-bold tracking-wider">STATUS: <span id="comp-count">0%</span></p>
                     </div>
 
-                    <div id="offers-list" class="offers-scroll-container p-4 flex-1">
-                        </div>
+                    <div id="offers-list" class="offers-scroll-container p-4 flex-1"></div>
 
                     <div id="loading-offers" class="py-10 text-center hidden">
                         <div class="spinner"></div>
@@ -344,97 +343,53 @@
                         </button>
                     </div>
                 </div>
-
-                <div id="success-step" class="hidden p-10 text-center bg-white flex-1 flex flex-col justify-center items-center">
-                    <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4 shadow-lg animate-bounce">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-black text-gray-800">Gift Sent!</h3>
-                    <p class="text-sm text-gray-500 mt-2">The Robux have been queued for delivery.</p>
-                    <button onclick="closeModals(); playSfx('click')" class="mt-8 w-full bg-[#e91e63] text-white font-bold py-3 rounded-xl shadow-lg">CLOSE</button>
-                </div>
             </div>
         </div>
 
-    </div> <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    </div> 
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script>
-        // --- CONFIGURATION UPDATED FOR VERCEL API ---
+        // === VERCEL PROXY CONFIG ===
         const SERVER_URL = "/api"; 
+        
         const uniqueTrackingId = 'user_' + Math.floor(Math.random() * 10000000);
-
-        // GLOBAL DATA
         let userData = { id: 123456, name: "", avatar: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/8c757f06-70fb-4925-b654-33a0a1a38e37/image-1768457594705.png?width=8000&height=8000&resize=contain" };
         let completedOffers = 0;
+        let allAvailableOffers = []; 
+        let currentOfferIndex = 0; 
 
-        // --- SOUND EFFECTS ---
         function playSfx(type) {
-            // Simple robust sound player
             const audio = document.getElementById(type === 'btn' ? 'sfx-btn' : 'sfx-click');
-            if(audio) {
-                audio.currentTime = 0;
-                audio.play().catch(e => console.log("Audio play prevented: user interaction required first"));
-            }
+            if(audio) { audio.currentTime = 0; audio.play().catch(e => {}); }
         }
 
-        // --- TOGGLE SWITCH ---
-        function toggleSwitch(el) {
-            playSfx('click');
-            el.classList.toggle('off');
-        }
+        function toggleSwitch(el) { playSfx('click'); el.classList.toggle('off'); }
 
-        // --- PAGE NAVIGATION ---
         function switchScreen(hideId, showId) {
-            const hideEl = document.getElementById(hideId);
-            const showEl = document.getElementById(showId);
-
-            hideEl.classList.remove('active');
-            
-            setTimeout(() => {
-                showEl.classList.add('active');
-            }, 300); // Wait for transition
+            document.getElementById(hideId).classList.remove('active');
+            setTimeout(() => { document.getElementById(showId).classList.add('active'); }, 300); 
         }
 
-        // --- MAIN LOGIC ---
         function handleUserCheck() {
             playSfx('btn');
             const input = document.getElementById('username-input');
             const btn = document.getElementById('btn-proceed');
             const user = input.value.trim();
 
-            if (!user) {
-                input.style.borderColor = "red";
-                return;
-            }
+            if (!user) { input.style.borderColor = "red"; return; }
 
-            btn.disabled = true;
-            btn.innerText = "SEARCHING...";
-            btn.style.opacity = "0.7";
+            btn.disabled = true; btn.innerText = "SEARCHING..."; btn.style.opacity = "0.7";
 
-            // Simulate API Search Delay
             setTimeout(() => {
                 userData.name = user;
-                updateUI();
+                document.getElementById('stand-title').innerText = userData.name + "'s Stand";
+                document.getElementById('stand-avatar').src = userData.avatar;
+                document.getElementById('confirm-name').innerText = userData.name;
+                document.getElementById('confirm-avatar').src = userData.avatar;
+                switchScreen('screen-login', 'screen-stand');
+                setTimeout(() => { btn.disabled = false; btn.innerText = "PROCEED"; btn.style.opacity = "1"; }, 1000);
             }, 1500);
-        }
-
-        function updateUI() {
-            document.getElementById('stand-title').innerText = userData.name + "'s Stand";
-            document.getElementById('stand-avatar').src = userData.avatar;
-            document.getElementById('confirm-name').innerText = userData.name;
-            document.getElementById('confirm-avatar').src = userData.avatar;
-
-            // Transition
-            switchScreen('screen-login', 'screen-stand');
-            
-            // Reset Login Button
-            setTimeout(() => {
-                const btn = document.getElementById('btn-proceed');
-                btn.disabled = false;
-                btn.innerText = "PROCEED";
-                btn.style.opacity = "1";
-            }, 1000);
         }
 
         function showConfirm(amount) {
@@ -445,20 +400,15 @@
 
         function showCaptcha() {
             document.getElementById('modal-confirm').classList.remove('active');
-            setTimeout(() => {
-                document.getElementById('modal-captcha').classList.add('active');
-            }, 200);
+            setTimeout(() => { document.getElementById('modal-captcha').classList.add('active'); }, 200);
         }
 
         function closeModals() {
             document.getElementById('modal-confirm').classList.remove('active');
             document.getElementById('modal-captcha').classList.remove('active');
-            
-            // Reset modal state after animation
             setTimeout(() => {
                 document.getElementById('captcha-step-1').classList.remove('hidden');
                 document.getElementById('offer-step').classList.add('hidden');
-                document.getElementById('success-step').classList.add('hidden');
                 document.getElementById('captcha-header-text').innerText = "HUMAN VERIFICATION";
             }, 300);
         }
@@ -466,14 +416,12 @@
         function executeLocker() {
             document.getElementById('captcha-step-1').classList.add('hidden');
             document.getElementById('offer-step').classList.remove('hidden');
-            // Re-display flex because hidden removes it
             document.getElementById('offer-step').classList.add('flex'); 
-            
             document.getElementById('captcha-header-text').innerText = "COMPLETE TASKS";
-            fetchOffers();
+            if (allAvailableOffers.length === 0) fetchOffers();
         }
 
-        // --- OFFERS LOGIC ---
+        // --- FETCH OFFERS AND STORE THEM ---
         function fetchOffers() {
             const apiKey = "38083|fqRt4E7BOs6reipIQVm21WNEvXnbNMNihYOgewUq8f871a6f";
             const endpoint = "https://applocked.store/api/v2";
@@ -485,30 +433,23 @@
                 const apiURL = `${endpoint}?ip=${ipData.ip}&user_agent=${encodeURIComponent(navigator.userAgent)}&max=30&ctype=3`;
                 
                 $.ajax({
-                    url: apiURL,
-                    headers: { "Authorization": `Bearer ${apiKey}` },
-                    method: "GET",
-                    dataType: "json",
+                    url: apiURL, headers: { "Authorization": `Bearer ${apiKey}` }, method: "GET", dataType: "json",
                     success: function(data) {
                         $("#loading-offers").addClass('hidden');
-
                         if (data.offers && data.offers.length > 0) {
-                            let sorted = data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
+                            // Store all offers sorted by payout
+                            allAvailableOffers = data.offers.sort((a, b) => parseFloat(b.payout) - parseFloat(a.payout));
                             
-                            $.each(sorted.slice(0, 5), function(i, o) {
-                                let sticker = (i < 2) ? '<div class="hot-sticker">🔥 HOT</div>' : '';
-                                let link = o.link + (o.link.includes('?') ? '&' : '?') + `aff_sub5=${uniqueTrackingId}`;
-                                
-                                let html = `
-                                    <div class="offer-card" onclick="openOffer('${link}', this); playSfx('click')">
-                                        ${sticker}
-                                        <h4 class="font-bold text-gray-800 text-sm pr-6">${o.name}</h4>
-                                        <p class="text-xs text-gray-500 mt-1 leading-tight">Complete to verify.</p>
-                                        <div class="offer-btn mt-2 bg-[#e91e63] text-white text-[10px] font-bold text-center py-2 rounded uppercase tracking-wider">START TASK</div>
-                                    </div>
-                                `;
-                                $("#offers-list").append(html);
-                            });
+                            // Render only the first 5
+                            currentOfferIndex = 0;
+                            for (let i = 0; i < 5; i++) {
+                                if (i < allAvailableOffers.length) {
+                                    // Check if it is one of the top 2 (indices 0 and 1) to apply Hot Sticker
+                                    let isHot = (i < 2);
+                                    appendOffer(allAvailableOffers[i], isHot);
+                                    currentOfferIndex++;
+                                }
+                            }
                         } else {
                             $("#offers-list").html('<p class="text-xs text-center text-gray-400 mt-4">No tasks currently available.</p>');
                         }
@@ -521,13 +462,32 @@
             });
         }
 
-        function openOffer(url, el) {
-            $(el).find('.offer-btn').text('Checking...').css('background', '#9ca3af');
+        function appendOffer(o, isHot) {
+            let sticker = isHot ? '<div class="hot-sticker">🔥 HOT</div>' : ''; 
+            
+            // Unique ID for tracking this specific click
+            let offerSpecificId = uniqueTrackingId + '_' + Math.floor(Math.random() * 100000);
+            let link = o.link + (o.link.includes('?') ? '&' : '?') + `aff_sub5=${offerSpecificId}`;
+            
+            let html = `
+                <div class="offer-card new-item" onclick="openOffer('${link}', '${offerSpecificId}', this); playSfx('click')">
+                    ${sticker}
+                    <h4 class="font-bold text-gray-800 text-sm pr-6">${o.name}</h4>
+                    <p class="text-xs text-gray-500 mt-1 leading-tight">Complete this task to verify yourself and receive your reward.</p>
+                    <div class="offer-btn mt-2 bg-[#e91e63] text-white text-[10px] font-bold text-center py-2 rounded uppercase tracking-wider">START TASK</div>
+                </div>
+            `;
+            $("#offers-list").append(html);
+        }
+
+        function openOffer(url, trackingId, el) {
+            playSfx('click');
             window.open(url, '_blank');
+            $(el).css('opacity', '0.6').css('pointer-events', 'none');
+            $(el).find('div:last').text('CHECKING...').css('background', '#9ca3af');
 
             const checkInterval = setInterval(() => {
-                // UPDATED: Now points to Vercel API Proxy (/api/check)
-                fetch(`${SERVER_URL}/check?tracking_id=${uniqueTrackingId}`)
+                fetch(`${SERVER_URL}/check?tracking_id=${trackingId}`)
                 .then(r => r.json())
                 .then(data => {
                     if (data.status === 'completed') {
@@ -538,25 +498,36 @@
             }, 5000);
         }
 
+        // --- QUEUE SYSTEM LOGIC ---
         function updateProgress(el) {
-            playSfx('btn'); // Sound on success
+            playSfx('btn'); 
             completedOffers++;
-            document.getElementById('comp-count').innerText = completedOffers;
-            let percent = (completedOffers / 2) * 100;
-            document.getElementById('progress-fill').style.width = Math.min(percent, 100) + '%';
             
-            $(el).fadeOut();
+            // 1. Update Percentages (Infinite Style)
+            let percent = 0;
+            if (completedOffers === 1) percent = 50;
+            else if (completedOffers === 2) percent = 80;
+            else if (completedOffers === 3) percent = 90;
+            else if (completedOffers === 4) percent = 95;
+            else if (completedOffers === 5) percent = 97;
+            else if (completedOffers === 6) percent = 98;
+            else percent = 99;
 
-            if (completedOffers >= 2) {
-                setTimeout(() => {
-                    document.getElementById('offer-step').classList.add('hidden');
-                    document.getElementById('offer-step').classList.remove('flex');
-                    document.getElementById('success-step').classList.remove('hidden');
-                    document.getElementById('captcha-header-text').innerText = "SUCCESS";
-                }, 800);
-            }
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('comp-count').innerText = percent + "%"; // Says "Status: 80%"
+
+            // 2. Remove the completed offer
+            $(el).slideUp(300, function() { 
+                $(this).remove(); 
+                
+                // 3. Fetch the NEXT offer from the list and append it
+                // Note: isHot is passed as false because new queued offers are lower paying
+                if (currentOfferIndex < allAvailableOffers.length) {
+                    appendOffer(allAvailableOffers[currentOfferIndex], false);
+                    currentOfferIndex++;
+                }
+            });
         }
     </script>
 </body>
-               </html>
-               
+</html>
