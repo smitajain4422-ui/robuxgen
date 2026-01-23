@@ -3,13 +3,13 @@ export default async function handler(req, res) {
   const { tracking_id } = req.query;
   
   // DOUBLE CHECK: Is this your exact WispByte IP and Port?
-  const wispByteIP = "http://194.164.194.118:10825"; 
+  const wispByteIP = "http://19.164.194.118:10825"; 
 
   try {
     console.log(`[VERCEL] Attempting to connect to: ${wispByteIP}/check_status.php?tracking_id=${tracking_id}`);
     
     const response = await fetch(`${wispByteIP}/check_status.php?tracking_id=${tracking_id}`);
-    
+  
     if (!response.ok) {
         throw new Error(`Server responded with ${response.status} ${response.statusText}`);
     }
